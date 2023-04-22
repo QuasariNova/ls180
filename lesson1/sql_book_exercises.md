@@ -60,3 +60,69 @@ SELECT customer_name FROM orders WHERE side = 'Onion Rings';
  Joyce Silva
 (2 rows)
 ```
+
+# Your First Database: Schema
+## Create and View Databases
+1. From the Terminal, create a database called database_one.
+
+```bash
+createdb database_one
+```
+---
+
+2. From the Terminal, connect via the psql console to the database that you created in the previous question.
+
+```bash
+psql -d database_one
+```
+---
+
+3. From the psql console, create a database called database_two.
+
+```SQL
+CREATE DATABASE database_two;
+```
+
+```
+CREATE DATABASE
+```
+---
+
+4. From the psql console, connect to database_two.
+
+```
+\c database_two
+```
+
+```
+You are now connected to database "database_two" as user "postgres".
+database_two=#
+```
+---
+5. Display all of the databases that currently exist.
+
+```
+\list
+```
+
+```
+     Name     |  Owner   | Encoding |          Collate           |           Ctype            | ICU Locale | Locale Provider |   Access privileges
+--------------+----------+----------+----------------------------+----------------------------+------------+-----------------+-----------------------
+ database_one | postgres | UTF8     | English_United States.1252 | English_United States.1252 |            | libc            |
+ database_two | postgres | UTF8     | English_United States.1252 | English_United States.1252 |            | libc            |
+ postgres     | postgres | UTF8     | English_United States.1252 | English_United States.1252 |            | libc            |
+ sql_book     | postgres | UTF8     | English_United States.1252 | English_United States.1252 |            | libc            |
+ template0    | postgres | UTF8     | English_United States.1252 | English_United States.1252 |            | libc            | =c/postgres          +
+              |          |          |                            |                            |            |                 | postgres=CTc/postgres
+ template1    | postgres | UTF8     | English_United States.1252 | English_United States.1252 |            | libc            | =c/postgres          +
+              |          |          |                            |                            |            |                 | postgres=CTc/postgres
+(6 rows)
+```
+---
+
+6. From the psql console, delete database_two.
+
+```sql
+\c database_one
+DROP DATABASE database_two;
+```
