@@ -516,3 +516,338 @@ INSERT INTO orders (customer_name, customer_email, burger, burger_cost, side, si
          ('Natash O''Shea', 'natasha@osheafamily.com', 'LS Double Deluxe Burger', 6, 'Onion Rings', 1.5, 'Chocolate Shake', 2, 43),
          ('Aaron Muller', NULL, 'LS Burger', 2, NULL, DEFAULT, NULL, DEFAULT, 10);
 ```
+
+## Select Queries
+1. Make sure you are connected to the encyclopedia database. Write a query to retrieve the population of the USA.
+
+```sql
+\c encyclopedia
+SELECT population
+  FROM countries
+  WHERE name = 'USA';
+```
+
+```
+ population
+------------
+  325365189
+(1 row)
+```
+---
+
+2. Write a query to return the population and the capital (with the columns in that order) of all the countries in the table.
+
+```sql
+SELECT population, capital
+  FROM countries;
+```
+
+```
+ population |     capital
+------------+-----------------
+   67158000 | Paris
+  325365189 | Washington D.C.
+   82349400 | Berlin
+  126672000 | Tokyo
+(4 rows)
+```
+---
+
+3. Write a query to return the names of all the countries ordered alphabetically.
+
+```sql
+SELECT name
+  FROM countries
+  ORDER BY name;
+```
+
+```
+  name
+---------
+ France
+ Germany
+ Japan
+ USA
+(4 rows)
+```
+---
+
+4. Write a query to return the names and the capitals of all the countries in order of population, from lowest to highest.
+
+```sql
+SELECT name, capital
+  FROM countries
+  ORDER BY population;
+```
+
+```
+  name   |     capital
+---------+-----------------
+ France  | Paris
+ Germany | Berlin
+ Japan   | Tokyo
+ USA     | Washington D.C.
+(4 rows)
+```
+---
+
+5. Write a query to return the same information as the previous query, but ordered from highest to lowest.
+
+```sql
+SELECT name, capital
+  FROM countries
+  ORDER BY population DESC;
+```
+
+```
+  name   |     capital
+---------+-----------------
+ USA     | Washington D.C.
+ Japan   | Tokyo
+ Germany | Berlin
+ France  | Paris
+(4 rows)
+```
+---
+
+6. Write a query on the animals table, using ORDER BY, that will return the following output:
+
+```
+       name       |      binomial_name       | max_weight_kg | max_age_years
+------------------+--------------------------+---------------+---------------
+ Peregrine Falcon | Falco Peregrinus         |        1.5000 |            15
+ Pigeon           | Columbidae Columbiformes |        2.0000 |            15
+ Dove             | Columbidae Columbiformes |        2.0000 |            15
+ Golden Eagle     | Aquila Chrysaetos        |        6.3500 |            24
+ Kakapo           | Strigops habroptila      |        4.0000 |            60
+(5 rows)
+```
+
+Use only the columns that can be seen in the above output for ordering purposes.
+
+```sql
+SELECT name, binomial_name, max_weight_kg, max_age_years
+  FROM animals
+  ORDER BY max_age_years, max_weight_kg, name DESC;
+```
+
+7. Write a query that returns the names of all the countries with a population greater than 70 million.
+
+```sql
+SELECT name
+  FROM countries
+  WHERE population > 70000000;
+```
+
+```
+  name
+---------
+ USA
+ Germany
+ Japan
+(3 rows)
+```
+---
+
+8. Write a query that returns the names of all the countries with a population greater than 70 million but less than 200 million.
+
+```sql
+SELECT name
+  FROM countries
+  WHERE population > 70000000
+    AND population < 200000000;
+```
+
+```
+  name
+---------
+ Germany
+ Japan
+(2 rows)
+```
+---
+
+9. Write a query that will return the first name and last name of all entries in the celebrities table where the value of the deceased column is not true.
+
+```sql
+SELECT first_name, last_name
+  FROM celebrities
+  WHERE deceased <> 'true';
+```
+
+Apparently, `NULL` keeps Elvis from showing up even though his `deceased` value is `NULL` not `true`. So launch School says to use this:
+
+```sql
+SELECT first_name, last_name
+  FROM celebrities
+  WHERE deceased <> 'true'
+    OR deceased IS NULL;
+```
+---
+
+10. Write a query that will return the first and last names of all the celebrities who sing.
+
+```sql
+SELECT first_name, last_name
+  FROM celebrities
+  WHERE occupation LIKE '%Singer%';
+```
+
+```
+ first_name |  last_name
+------------+-------------
+ Bruce      | Springsteen
+ Frank      | Sinatra
+ Madonna    |
+ Prince     |
+ Elvis      | Presley
+(5 rows)
+```
+---
+
+11. Write a query that will return the first and last names of all the celebrities who act.
+
+```sql
+SELECT first_name, last_name
+  FROM celebrities
+  WHERE occupation LIKE '%Act%';
+```
+
+```
+ first_name | last_name
+------------+-----------
+ Scarlett   | Johansson
+ Frank      | Sinatra
+ Tom        | Cruise
+ Madonna    |
+ Prince     |
+ Elvis      | Presley
+(6 rows)
+```
+---
+
+12. Write a query that will return the first and last names of all the celebrities who both sing and act.
+
+```sql
+SELECT first_name, last_name
+  FROM celebrities
+  WHERE occupation LIKE '%Singer%'
+    AND (occupation LIKE '%Actress%'
+      OR occupation LIKE '%Actor%');
+```
+
+```
+ first_name | last_name
+------------+-----------
+ Frank      | Sinatra
+ Madonna    |
+ Prince     |
+ Elvis      | Presley
+(4 rows)
+```
+---
+
+13. Connect to the `ls_burger` database. Write a query that lists all of the burgers that have been ordered, from cheapest to most expensive, where the cost of the burger is less than $5.00.
+
+```sql
+\c ls_burger
+SELECT burger
+  FROM orders
+  WHERE burger_cost < 5
+  ORDER BY burger_cost;
+```
+
+```
+      burger
+-------------------
+ LS Burger
+ LS Cheeseburger
+ LS Chicken Burger
+(3 rows)
+```
+---
+
+14. Write a query to return the customer name and email address and loyalty points from any order worth 20 or more loyalty points. List the results from the highest number of points to the lowest.
+
+```sql
+SELECT customer_name, customer_email, customer_loyalty_points
+  FROM orders
+  WHERE customer_loyalty_points >= 20
+  ORDER BY customer_loyalty_points DESC;
+```
+
+```
+ customer_name |     customer_email      | customer_loyalty_points
+---------------+-------------------------+-------------------------
+ Natasha O'Shea | natasha@osheafamily.com |                      43
+ James Bergman | james1998@email.com     |                      28
+(2 rows)
+```
+---
+
+15. Write a query that returns all the burgers ordered by Natasha O'Shea.
+
+```sql
+SELECT burger
+  FROM orders
+  WHERE customer_name = 'Natasha O''Shea';
+```
+
+```
+         burger
+-------------------------
+ LS Cheeseburger
+ LS Double Deluxe Burger
+(2 rows)
+```
+---
+
+16. Write a query that returns the customer name from any order which does not include a drink item.
+
+```sql
+SELECT customer_name
+  FROM orders
+  WHERE drink IS NULL;
+```
+
+```
+ customer_name
+---------------
+ Natasha O'Shea
+ Aaron Muller
+(2 rows)
+```
+---
+17. Write a query that returns the three meal items for any order which does not include fries.
+
+```sql
+SELECT burger, side, drink
+  FROM orders
+  WHERE side <> 'Fries' OR side IS NULL;
+```
+
+```
+         burger          |    side     |      drink
+-------------------------+-------------+-----------------
+ LS Double Deluxe Burger | Onion Rings | Chocolate Shake
+ LS Burger               |             |
+(2 rows)
+```
+---
+
+18. Write a query that returns the three meal items for any order that includes both a side and a drink.
+
+```sql
+SELECT burger, side, drink
+  FROM orders
+  WHERE side IS NOT NULL
+    AND drink IS NOT NULL;
+```
+
+```
+         burger          |    side     |      drink
+-------------------------+-------------+-----------------
+ LS Chicken Burger       | Fries       | Cola
+ LS Double Deluxe Burger | Onion Rings | Chocolate Shake
+(2 rows)
+```
