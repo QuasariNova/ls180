@@ -526,13 +526,6 @@ SELECT population
   FROM countries
   WHERE name = 'USA';
 ```
-
-```
- population
-------------
-  325365189
-(1 row)
-```
 ---
 
 2. Write a query to return the population and the capital (with the columns in that order) of all the countries in the table.
@@ -540,16 +533,6 @@ SELECT population
 ```sql
 SELECT population, capital
   FROM countries;
-```
-
-```
- population |     capital
-------------+-----------------
-   67158000 | Paris
-  325365189 | Washington D.C.
-   82349400 | Berlin
-  126672000 | Tokyo
-(4 rows)
 ```
 ---
 
@@ -560,16 +543,6 @@ SELECT name
   FROM countries
   ORDER BY name;
 ```
-
-```
-  name
----------
- France
- Germany
- Japan
- USA
-(4 rows)
-```
 ---
 
 4. Write a query to return the names and the capitals of all the countries in order of population, from lowest to highest.
@@ -579,16 +552,6 @@ SELECT name, capital
   FROM countries
   ORDER BY population;
 ```
-
-```
-  name   |     capital
----------+-----------------
- France  | Paris
- Germany | Berlin
- Japan   | Tokyo
- USA     | Washington D.C.
-(4 rows)
-```
 ---
 
 5. Write a query to return the same information as the previous query, but ordered from highest to lowest.
@@ -597,16 +560,6 @@ SELECT name, capital
 SELECT name, capital
   FROM countries
   ORDER BY population DESC;
-```
-
-```
-  name   |     capital
----------+-----------------
- USA     | Washington D.C.
- Japan   | Tokyo
- Germany | Berlin
- France  | Paris
-(4 rows)
 ```
 ---
 
@@ -630,6 +583,7 @@ SELECT name, binomial_name, max_weight_kg, max_age_years
   FROM animals
   ORDER BY max_age_years, max_weight_kg, name DESC;
 ```
+---
 
 7. Write a query that returns the names of all the countries with a population greater than 70 million.
 
@@ -637,15 +591,6 @@ SELECT name, binomial_name, max_weight_kg, max_age_years
 SELECT name
   FROM countries
   WHERE population > 70000000;
-```
-
-```
-  name
----------
- USA
- Germany
- Japan
-(3 rows)
 ```
 ---
 
@@ -656,14 +601,6 @@ SELECT name
   FROM countries
   WHERE population > 70000000
     AND population < 200000000;
-```
-
-```
-  name
----------
- Germany
- Japan
-(2 rows)
 ```
 ---
 
@@ -692,17 +629,6 @@ SELECT first_name, last_name
   FROM celebrities
   WHERE occupation LIKE '%Singer%';
 ```
-
-```
- first_name |  last_name
-------------+-------------
- Bruce      | Springsteen
- Frank      | Sinatra
- Madonna    |
- Prince     |
- Elvis      | Presley
-(5 rows)
-```
 ---
 
 11. Write a query that will return the first and last names of all the celebrities who act.
@@ -711,18 +637,6 @@ SELECT first_name, last_name
 SELECT first_name, last_name
   FROM celebrities
   WHERE occupation LIKE '%Act%';
-```
-
-```
- first_name | last_name
-------------+-----------
- Scarlett   | Johansson
- Frank      | Sinatra
- Tom        | Cruise
- Madonna    |
- Prince     |
- Elvis      | Presley
-(6 rows)
 ```
 ---
 
@@ -735,16 +649,6 @@ SELECT first_name, last_name
     AND (occupation LIKE '%Actress%'
       OR occupation LIKE '%Actor%');
 ```
-
-```
- first_name | last_name
-------------+-----------
- Frank      | Sinatra
- Madonna    |
- Prince     |
- Elvis      | Presley
-(4 rows)
-```
 ---
 
 13. Connect to the `ls_burger` database. Write a query that lists all of the burgers that have been ordered, from cheapest to most expensive, where the cost of the burger is less than $5.00.
@@ -756,15 +660,6 @@ SELECT burger
   WHERE burger_cost < 5
   ORDER BY burger_cost;
 ```
-
-```
-      burger
--------------------
- LS Burger
- LS Cheeseburger
- LS Chicken Burger
-(3 rows)
-```
 ---
 
 14. Write a query to return the customer name and email address and loyalty points from any order worth 20 or more loyalty points. List the results from the highest number of points to the lowest.
@@ -775,14 +670,6 @@ SELECT customer_name, customer_email, customer_loyalty_points
   WHERE customer_loyalty_points >= 20
   ORDER BY customer_loyalty_points DESC;
 ```
-
-```
- customer_name |     customer_email      | customer_loyalty_points
----------------+-------------------------+-------------------------
- Natasha O'Shea | natasha@osheafamily.com |                      43
- James Bergman | james1998@email.com     |                      28
-(2 rows)
-```
 ---
 
 15. Write a query that returns all the burgers ordered by Natasha O'Shea.
@@ -791,14 +678,6 @@ SELECT customer_name, customer_email, customer_loyalty_points
 SELECT burger
   FROM orders
   WHERE customer_name = 'Natasha O''Shea';
-```
-
-```
-         burger
--------------------------
- LS Cheeseburger
- LS Double Deluxe Burger
-(2 rows)
 ```
 ---
 
@@ -809,14 +688,6 @@ SELECT customer_name
   FROM orders
   WHERE drink IS NULL;
 ```
-
-```
- customer_name
----------------
- Natasha O'Shea
- Aaron Muller
-(2 rows)
-```
 ---
 17. Write a query that returns the three meal items for any order which does not include fries.
 
@@ -824,14 +695,6 @@ SELECT customer_name
 SELECT burger, side, drink
   FROM orders
   WHERE side <> 'Fries' OR side IS NULL;
-```
-
-```
-         burger          |    side     |      drink
--------------------------+-------------+-----------------
- LS Double Deluxe Burger | Onion Rings | Chocolate Shake
- LS Burger               |             |
-(2 rows)
 ```
 ---
 
@@ -843,11 +706,129 @@ SELECT burger, side, drink
   WHERE side IS NOT NULL
     AND drink IS NOT NULL;
 ```
+---
 
+## More on Select
+1. Make sure you are connected to the `encyclopedia` database. Write a query to retrieve the first row of data from the `countries` table.
+
+```sql
+SELECT *
+  FROM countries
+  LIMIT 1;
 ```
-         burger          |    side     |      drink
--------------------------+-------------+-----------------
- LS Chicken Burger       | Fries       | Cola
- LS Double Deluxe Burger | Onion Rings | Chocolate Shake
-(2 rows)
+---
+
+2. Write a query to retrieve the name of the country with the largest population.
+
+```sql
+SELECT name
+  FROM countries
+  ORDER BY population DESC
+  LIMIT 1;
+```
+---
+
+3. Write a query to retrieve the name of the country with the second largest population.
+
+```sql
+SELECT name
+  FROM countries
+  ORDER BY population DESC
+  LIMIT 1 OFFSET 1;
+```
+---
+
+4. Write a query to retrieve all of the unique values from the binomial_name column of the `animals` table.
+
+```sql
+SELECT DISTINCT binomial_name
+  FROM animals;
+```
+---
+
+5. Write a query to return the longest binomial name from the `animals` table.
+
+```sql
+SELECT binomial_name
+  FROM animals
+  ORDER BY length(binomial_name) DESC
+  LIMIT 1;
+```
+---
+
+6. Write a query to return the first name of any celebrity born in 1958.
+
+```sql
+SELECT first_name
+  FROM celebrities
+  WHERE date_part('year', date_of_birth) = 1958;
+```
+---
+
+7. Write a query to return the highest maximum age from the `animals` table.
+
+```sql
+SELECT max(max_age_years)
+  FROM animals;
+```
+---
+
+8. Write a query to return the average maximum weight from the animals table.
+
+```sql
+SELECT avg(max_weight_kg)
+  FROM animals;
+```
+---
+
+9. Write a query to return the number of rows in the `countries` table.
+
+```sql
+SELECT count(ID)
+  FROM countries;
+```
+---
+
+10. Write a query to return the total population of all the countries in the `countries` table.
+
+```sql
+SELECT sum(population)
+  FROM countries;
+```
+---
+
+11. Write a query to return each unique conservation status code alongside the number of animals that have that code.
+
+```sql
+SELECT conservation_status, count(id)
+  FROM animals
+  GROUP BY conservation_status;
+```
+---
+
+12. Connect to the `ls_burger` database. Write a query that returns the average burger cost for all orders that include fries.
+
+```sql
+SELECT avg(burger_cost)
+  FROM orders
+  WHERE side = 'Fries';
+```
+---
+
+13. Write a query that returns the cost of the cheapest side ordered.
+
+```sql
+SELECT min(side_cost)
+  FROM orders
+  WHERE side IS NOT NULL;
+```
+---
+
+14. Write a query that returns the number of orders that include Fries and the number of orders that include Onion Rings.
+
+```sql
+SELECT side, count(id)
+  FROM orders
+  WHERE side IS NOT NULL
+  GROUP BY side;
 ```
