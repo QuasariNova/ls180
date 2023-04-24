@@ -1335,12 +1335,10 @@ SELECT sum(p.product_cost)
 11. Write a query to return the name of every product included in an order alongside the number of times it has been ordered. Sort the results by product name, ascending.
 
 ```sql
-SELECT o.id, p.product_name, count(p.id) AS "Quantity"
-  FROM orders o
-  JOIN order_items oi
-    ON o.id = oi.order_id
+SELECT p.product_name, count(oi.id) AS "Quantity"
+  FROM order_items oi
   JOIN products p
     ON oi.product_id = p.id
-  GROUP BY o.id, p.id
-  ORDER BY o.id
+  GROUP BY p.id
+  ORDER BY p.product_name;
 ```
