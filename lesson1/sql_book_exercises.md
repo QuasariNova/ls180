@@ -1204,3 +1204,143 @@ INSERT INTO order_items
     (3, 9),
     (4, 1),
     (4, 5);
+```
+
+## SQL Joins
+
+1. Connect to the `encyclopedia` database. Write a query to return all of the country names along with their appropriate continent names.
+
+```sql
+SELECT countries.name, continents.continent_name
+  FROM countries
+  INNER JOIN continents
+    ON continents.id = countries.continent_id;
+```
+---
+
+2. Write a query to return all of the names and capitals of the European countries.
+
+```sql
+SELECT countries.name, countries.capital
+  FROM countries
+  JOIN continents
+    ON continents.id = countries.continent_id
+  WHERE continents.continent_name = 'Europe';
+```
+---
+
+3. Write a query to return the first name of any singer who had an album released under the Warner Bros label.
+
+```sql
+SELECT DISTINCT singers.first_name
+  FROM singers
+  JOIN albums
+    ON albums.singer_id = singers.id
+  WHERE albums.label LIKE '%Warner Bros%';
+```
+---
+
+4. Write a query to return the first name and last name of any singer who released an album in the 80s and who is still living, along with the names of the album that was released and the release date. Order the results by the singer's age (youngest first).
+
+```sql
+SELECT singers.first_name, singers.last_name, a.name, a.release_date
+  FROM singers
+  JOIN albums a
+    ON a.singer_id = singers.id
+  WHERE date_part('year', a.release_date) >= 1980
+    AND date_part('year', a.release_date) < 1990
+    AND singers.deceased = 'false'
+  ORDER BY singers.date_of_birth DESC;
+```
+---
+
+5. Write a query to return the first name and last name of any singer without an associated album entry.
+
+```sql
+SELECT singers.first_name, singers.last_name, albums.id
+  FROM singers
+  LEFT JOIN albums
+    ON singers.id = albums.singer_id
+  WHERE albums.id IS NULL;
+```
+---
+
+6. Rewrite the query for the last question as a sub-query.
+
+```sql
+SELECT first_name, last_name
+  FROM singers
+  WHERE id NOT IN (
+    SELECT singer_id FROM albums
+  );
+```
+---
+
+7. Connect to the `ls_burger` database. Return a list of all orders and their associated product items.
+
+```sql
+SELECT orders.*, products.*
+  FROM orders
+  JOIN order_items
+    ON order_items.order_id = orders.id
+  JOIN products
+    ON products.id = order_items.product_id;
+```
+---
+
+8. Return the id of any order that includes Fries. Use table aliasing in your query.
+
+```sql
+SELECT itm.order_id
+  FROM order_items itm
+  JOIN products p
+    ON p.id = itm.product_id
+  WHERE p.product_name = 'Fries';
+```
+
+Launch School adds the `orders` table to this. Why? The `order_id` column from the `order_items` table is the same as the `id` from the `orders` table. Its superfluous to join it if we only care about the id. Yeah the next question wants us to build on it, but meh!
+
+---
+
+9. Build on the query from the previous question to return the name of any customer who ordered fries. Return this in a column called 'Customers who like Fries'. Don't repeat the same customer name more than once in the results.
+
+```sql
+SELECT DISTINCT c.name AS "Customers Who like Fries"
+  FROM customers c
+  JOIN orders o
+    ON o.customer_id = c.id
+  JOIN order_items i
+    ON o.id = i.order_id
+  JOIN products p
+    ON i.product_id = p.id
+  WHERE p.product_name = 'Fries';
+```
+---
+
+10. Write a query to return the total cost of Natasha O'Shea's orders.
+
+```sql
+SELECT sum(p.product_cost)
+  FROM orders o
+  JOIN customers c
+    ON o.customer_id = c.id
+  JOIN order_items oi
+    ON o.id = oi.order_id
+  JOIN products p
+    ON oi.product_id = p.id
+  WHERE c.name = 'Natasha O''Shea';
+```
+---
+
+11. Write a query to return the name of every product included in an order alongside the number of times it has been ordered. Sort the results by product name, ascending.
+
+```sql
+SELECT o.id, p.product_name, count(p.id) AS "Quantity"
+  FROM orders o
+  JOIN order_items oi
+    ON o.id = oi.order_id
+  JOIN products p
+    ON oi.product_id = p.id
+  GROUP BY o.id, p.id
+  ORDER BY o.id
+```
