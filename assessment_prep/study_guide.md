@@ -76,30 +76,107 @@ A `CROSS JOIN` does not use a join condition, instead it joins every row of the 
 
 
 ## Understand how to use GROUP BY, ORDER BY, WHERE, and HAVING.
-### GROUP BY
+### GROUP BY [Group By](https://launchschool.com/books/sql/read/more_on_select#groupby)
 
-### ORDER BY
+Used in a `SELECT` query to form groups of rows based on columns which share a common value. You can only `SELECT` or `ORDER BY` columns that are aggregated via an aggregate function or are part of a `GROUP BY` clause when you use `GROUP BY`.
 
-### WHERE
+### ORDER BY [ORDER BY](https://launchschool.com/books/sql/read/select_queries#ordering)
 
-### HAVING
+Used in a `SELECT` query to dictate the ordering of the output rows. You can set it to order in `ASC` or `DESC` order and it will order rows based on where you place them in the clause.
 
+```sql
+SELECT full_name, enabled FROM users
+ORDER BY enabled DESC, full_name ASC;
+```
+
+The above would order accounts by if they are enabled(true first) then by the full name of the account holder in alphabetical order.
+
+### WHERE [Select Query Syntax](https://launchschool.com/books/sql/read/select_queries#selectquerysyntax)
+
+`WHERE` clauses filter the results of a `SELECT` query. It will only return rows that fit the criteria of the `WHERE` condition.
+
+```sql
+SELECT full_name FROM users
+WHERE enabled = true;
+```
+
+The above whould only have rows where the user account was enabled.
+
+### HAVING [How PostgreSQL Executes Queries](https://launchschool.com/lessons/a1779fd2/assignments/f4b7a9dc)
+
+`HAVING` conditions are similar to `WHERE` conditions, but instead of applying to individual rows they are instead applied to values used to create groups. The conditions are usually set to check an aggregate functions output or a column appearing in the `GROUP BY` clause.
+
+You can't have a `HAVING` condition without a `GROUP BY` clause.
+
+```sql
+SELECT role, count(id) FROM users
+GROUP BY role
+HAVING count(id) >= 5;
+```
+
+This would show the rows where at least 5 users held a specific role.
 
 ## Understand how to create and remove constraints, including CHECK constraints
-### Constraints
-#### Table Constraints
+### Constraints ([Adding a constraint])(https://launchschool.com/books/sql/read/alter_table#addingaconstraint) ([NOT NULL and Default Values](https://launchschool.com/lessons/a1779fd2/assignments/c6a5a6cb))
+- NOT NULL
+- UNIQUE
+- CHECK
+- FOREIGN KEY
 
-#### Column Constraints ([NOT NULL and Default Vlaues](https://launchschool.com/lessons/a1779fd2/assignments/c6a5a6cb))
-
-
-## Be familiar with using subqueries
+## Be familiar with using subqueries ([Book: Subqueries](https://launchschool.com/books/sql/read/joins#subqueries)) ([Subqueries](https://launchschool.com/lessons/e752508c/assignments/2009d549))
 
 # PostgreSQL
-## Describe what a sequence is and what they are used for.
+## Describe what a sequence is and what they are used for. ([Using Keys](https://launchschool.com/lessons/a1779fd2/assignments/00e428da))
+
+A sequence is a special kind of relation that is able to generate a series of numbers on demand by remembering the last number generated and generating a new number based on that.
+
+They are typically used as surrogate keys for rows as a primary key.
 
 ## Create an auto-incrementing column.
 
+```sql
+CREATE TABLE things (id serial, name text);
+```
+
+Is the same as:
+
+```sql
+CREATE SEQUENCE things_id_seq;
+CREATE TABLE things (
+       id integer NOT NULL DEFAULT nextval('colors_id_seq'),
+       name text
+);
+```
+
+Also you can add it to a column like so:
+
+```sql
+ALTER TABLE things
+  ADD COLUMN id series;
+```
+
 ## Define a default value for a column.
+
+```sql
+CREATE TABLE accounts (
+  id serial PRIMARY KEY,
+  name text,
+  amount numeric DEFAULT 0.0
+);
+
+/* or */
+
+ALTER TABLE accounts
+ALTER COLUMN amount
+  SET DEFAULT 0.0;
+```
+
+### Remove default from a column
+```sql
+ALTER TABLE accounts
+ALTER COLUMN amount
+ DROP DEFAULT;
+```
 
 ## Be able to describe what primary, foreign, natural, and surrogate keys are. ([Keys](https://launchschool.com/books/sql/read/table_relationships#keys)) ([Using Keys](https://launchschool.com/lessons/a1779fd2/assignments/00e428da))
 ### Primary Keys
@@ -125,15 +202,66 @@ These are tricky to find as data is prone to change and therefore can't always b
 A surrogate key is a created value added for the purpose of identifying a row of data in a database.
 
 ## Create and remove CHECK constraints from a column.
+### Create CHECK constraints on a column
+```sql
+CREATE TABLE accounts (
+  id serial PRIMARY KEY,
+  amount numeric CHECK (amount >= 0)
+);
+
+/* or */
+
+CREATE TABLE accounts (
+  id serial PRIMARY KEY,
+  amount numeric,
+  CHECK (amount >= 0)
+);
+
+/* or */
+
+ALTER TABLE accounts
+  ADD CHECK (amount >= 0);
+```
+
+### Remove CHECK constraints from a column
+
+```sql
+ALTER TABLE accounts
+  DROP CONSTRAINT accounts_amount_check;
+```
 
 ## Create and remove foreign key constraints from a column.
 ### Creating a Foreign Key
+```sql
+CREATE TABLE things (
+  id serial PRIMARY KEY,
+  name text,
+  material_id integer REFERENCES materials (id) ON DELETE CASCADE
+);
+
+/* or */
+
+CREATE TABLE things (
+  id serial PRIMARY KEY,
+  name text,
+  material_id integer,
+  FOREIGN KEY (material_id) REFERENCES materials(id)
+);
+
+/* or */
+
+ALTER TABLE things
+  ADD FOREIGN KEY (material_id) REFERENCES materials(id);
+```
 
 ### Removing a Foreign Key
 
+```sql
+ALTER TABLE things
+  DROP CONSTRAINT things_material_id_fkey;
+```
 
 # Database Diagrams
-
 ## Talk about the different levels of schema. ([Database Diagrams: Levels of Schema](https://launchschool.com/lessons/5ae760fa/assignments/2f3bc8f7))
 ### Conceptual Schema
 
