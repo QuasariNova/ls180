@@ -54,19 +54,54 @@ A `CROSS JOIN` does not use a join condition, instead it joins every row of the 
 ## Name and define the three sublanguages of SQL and be able to classify different statements by sublanguage. ([The SQL Language](https://launchschool.com/lessons/a1779fd2/assignments/7673d9a9))
 ### Data Definition Language (DDL)
 
+The data definition sublanguage of SQL is responsible for allowing users to create and modify the schema stored inside a database. Statements that belong to the data definition language include CREATE TABLE, ALTER TABLE, ADD COLUMN, DROP TABLE, and many other statements related to the structure of or rules that govern the data within the database.
+
 ### Data Manipulation Language (DML)
 
-### Data Control Language (DCL)
+The data manipulation sublanguage of SQL is responsible for allowing users to create, retrieve, update, or delete data within a database. The DML includes INSERT, SELECT, UPDATE, and DELETE.
 
+Some database separate retrieval and manipulation statements into two separate languages, but PostgreSQL considers them combined.
+
+### Data Control Language (DCL)
+The data control sublanguage of SQL is responsible for allowing users to manipulate the rights and access roles for access to a database or table.
 
 ## Write SQL statements using INSERT, UPDATE, DELETE, CREATE/ALTER/DROP TABLE, ADD/ALTER/DROP COLUMN.
 ### INSERT ([Inserting Data into a Table](https://launchschool.com/books/sql/read/add_data))
 
+`INSERT` is the Create part of CRUD. It allows you to add data to a Table.
+
+```sql
+INSERT INTO things
+       (column1, column2,...)
+VALUES (1, 'two', ...);
+```
+
 ### UPDATE ([Updating Data](https://launchschool.com/books/sql/read/update_and_delete_data#updatingdata))
+
+`UPDATE` is the Update part of CRUD. It allows you to change column(s) in a row of data.
+
+```sql
+UPDATE things
+   SET column = 'value'
+ WHERE condition;
+```
+
+Without using a `WHERE` condition, this command will update the column for every row.
 
 ### DELETE ([Deleting Data](https://launchschool.com/books/sql/read/update_and_delete_data#deletingdata))
 
+`DELETE` is the delete part of CRUD. It allows you to remove rows from a table.
+
+```sql
+DELETE FROM things
+ WHERE condition;
+```
+
+Without a `WHERE` condition, this command will delete every row in the table.
+
 ### CREATE TABLE ([Create and View Tables](https://launchschool.com/books/sql/read/create_table))
+
+
 
 ### ADD ([Alter a Table](https://launchschool.com/books/sql/read/alter_table)) ([Adding a Column](https://launchschool.com/books/sql/read/alter_table#addingacolumn)) ([Adding a Constraint](https://launchschool.com/books/sql/read/alter_table#addingaconstraint))
 
