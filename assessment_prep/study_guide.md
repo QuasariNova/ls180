@@ -101,14 +101,43 @@ Without a `WHERE` condition, this command will delete every row in the table.
 
 ### CREATE TABLE ([Create and View Tables](https://launchschool.com/books/sql/read/create_table))
 
+`CREATE TABLE` is used to create a table schema for data to be inserted in to.
 
+```sql
+CREATE TABLE table_name (
+  column_name integer,
+  column2_name text,
+  CONSTRAINT constraint_name CHECK (check)
+);
+```
 
 ### ADD ([Alter a Table](https://launchschool.com/books/sql/read/alter_table)) ([Adding a Column](https://launchschool.com/books/sql/read/alter_table#addingacolumn)) ([Adding a Constraint](https://launchschool.com/books/sql/read/alter_table#addingaconstraint))
 
+`ADD` can be used with an `ALTER TABLE` command to add a new column or constraint.
+
 ### ALTER ([Alter a Table](https://launchschool.com/books/sql/read/alter_table))
+
+`ALTER` can allow you to alter a table, column, or other relation.
 
 ### DROP ([Alter a Table](https://launchschool.com/books/sql/read/alter_table)) ([Removing a Column](https://launchschool.com/books/sql/read/alter_table#removingacolumn)) ([Dropping Tables](https://launchschool.com/books/sql/read/alter_table#droppingtables))
 
+`DROP` allows you to permanently delete schema along with its associated data.
+
+```sql
+DROP TABLE tablename;
+
+DROP DATABASE dbname;
+
+ALTER TABLE tablename
+ DROP COLUMN columnname;
+
+ALTER TABLE tablename
+ DROP CONSTRAINT constraintname;
+
+ALTER TABLE tablename
+ALTER COLUMN columnname
+ DROP NOT NULL;
+```
 
 ## Understand how to use GROUP BY, ORDER BY, WHERE, and HAVING.
 ### GROUP BY [Group By](https://launchschool.com/books/sql/read/more_on_select#groupby)
@@ -154,11 +183,95 @@ This would show the rows where at least 5 users held a specific role.
 ## Understand how to create and remove constraints, including CHECK constraints
 ### Constraints ([Adding a constraint])(https://launchschool.com/books/sql/read/alter_table#addingaconstraint) ([NOT NULL and Default Values](https://launchschool.com/lessons/a1779fd2/assignments/c6a5a6cb))
 - NOT NULL
+    - Creation
+
+    ```sql
+    CREATE TABLE things (
+      id integer NOT NULL
+    );
+
+    /* or */
+    ALTER TABLE things
+    ALTER COLUMN id
+      SET NOT NULL;
+    ```
+
+    - Removal
+
+    ```sql
+    ALTER TABLE things
+    ALTER COLUMN id
+     DROP NOT NULL;
+    ```
+
 - UNIQUE
+    - Creation
+
+    ```sql
+    CREATE TABLE things (
+      id integer UNIQUE
+    );
+
+    /* or */
+    ALTER TABLE things
+      ADD UNIQUE (id);
+    ```
+
+    More than one column can be added to a `UNIQUE` constraint, making combinations of those columns must be unique.
+
+    - Removal
+
+    ```sql
+    ALTER TABLE things
+     DROP CONSTRAINT things_id_key;
+    ```
+
 - CHECK
+    - Creation
+
+    ```sql
+    CREATE TABLE things (
+      name text CHECK(length(name) > 0)
+    );
+
+    /* or */
+
+    ALTER TABLE things
+      ADD CHECK (length(name) > 0);
+    ```
+
+    - Removal
+
+    ```sql
+    ALTER TABLE things
+      DROP CONSTRAINT things_name_check;
+    ```
+
 - FOREIGN KEY
+      - Creation
+
+      ```sql
+      CREATE TABLE things (
+        material_id integer REFERENCES materials(id)
+      );
+
+      /* or */
+
+      ALTER TABLE things
+        ADD FOREIGN KEY (material_id)
+        REFERENCES materials(id);
+      ```
+
+      - Removal
+
+      ```sql
+      ALTER TABLE things
+        DROP CONSTRAINT things_material_id_fkey;
+      ```
 
 ## Be familiar with using subqueries ([Book: Subqueries](https://launchschool.com/books/sql/read/joins#subqueries)) ([Subqueries](https://launchschool.com/lessons/e752508c/assignments/2009d549))
+
+TODO Subqueries
 
 # PostgreSQL
 ## Describe what a sequence is and what they are used for. ([Using Keys](https://launchschool.com/lessons/a1779fd2/assignments/00e428da))
