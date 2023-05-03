@@ -248,30 +248,67 @@ This would show the rows where at least 5 users held a specific role.
     ```
 
 - FOREIGN KEY
-      - Creation
+    - Creation
 
-      ```sql
-      CREATE TABLE things (
-        material_id integer REFERENCES materials(id)
-      );
+    ```sql
+    CREATE TABLE things (
+      material_id integer REFERENCES materials(id)
+    );
 
-      /* or */
+    /* or */
 
-      ALTER TABLE things
-        ADD FOREIGN KEY (material_id)
-        REFERENCES materials(id);
-      ```
+    ALTER TABLE things
+      ADD FOREIGN KEY (material_id)
+      REFERENCES materials(id);
+    ```
 
-      - Removal
+    - Removal
 
-      ```sql
-      ALTER TABLE things
-        DROP CONSTRAINT things_material_id_fkey;
-      ```
+    ```sql
+    ALTER TABLE things
+      DROP CONSTRAINT things_material_id_fkey;
+    ```
 
 ## Be familiar with using subqueries ([Book: Subqueries](https://launchschool.com/books/sql/read/joins#subqueries)) ([Subqueries](https://launchschool.com/lessons/e752508c/assignments/2009d549))
 
-TODO Subqueries
+- Used in `WHERE` as conditional subquery
+
+    ```sql
+    SELECT full_name FROM users
+     WHERE users.id NOT IN (
+       SELECT user_id FROM checkouts
+     );
+    ```
+
+    - `NOT IN` checks if value is not in subquery
+    - `IN` checks if value is in subquery
+    - `EXISTS` checks if any rows at all are returned by the subquery
+    - `ANY`/`SOME` used with operators to check if any of the subqueries results match the experession used with the operator
+
+        ```sql
+        SELECT name FROM authors WHERE length(name) > ANY
+        (SELECT length(title) FROM books);
+        ```
+
+    - `ALL` like `ANY`/`SOME`, but requires all values of the subquery return to conform to the expression. Using `<>` or `!=` will make this behave like a `NOT IN`.
+- Transient Table subquery, used as the `FROM` in a `SELECT` statement
+
+    ```sql
+    SELECT column_name FROM
+      (SELECT column_name FROM a_table) AS alias_name
+    ```
+
+    - Be careful of column names for the toplevel `SELECT` as they must match the column names returned by the subquery.
+
+- Scalar subquery as a column in a `SELECT` statement
+
+    ```sql
+    SELECT name,
+           (SELECT COUNT(item_id) FROM bids WHERE item_id = items.id)
+      FROM items
+    ```
+
+    - Scalar subqueries must return 1 column and 1 row.
 
 # PostgreSQL
 ## Describe what a sequence is and what they are used for. ([Using Keys](https://launchschool.com/lessons/a1779fd2/assignments/00e428da))
